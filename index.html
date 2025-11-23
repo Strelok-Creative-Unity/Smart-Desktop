@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Зацикленное видео</title>
+        <script src="./suncalc.min.js"></script>
+        <style id="clock">
+            @font-face {
+                font-family: 'minecraft';
+                src: url('./minecraft.ttf');
+            }
+            body {
+                display: flex;
+                justify-content: flex-end;
+                padding-right: 20px;
+                background-color: hsl(210, 30%, 8%);
+                color: hsla(210, 20%, 90%, 0.89);
+                font-family: 'minecraft', sans-serif;
+                font-weight: 100;
+            }
+            #container {
+                position: absolute;
+                right: 200px;
+                overflow: visible;
+            }
+
+            .column,
+            .colon {
+                height: fit-content;
+                display: inline-block;
+                vertical-align: top;
+                font-size: 86px;
+                line-height: 86px;
+                z-index: 20;
+                position: relative;
+            }
+
+            .column {
+                user-select: none;
+                transition: transform 300ms;
+            }
+
+            .colon {
+                transition: transform 300ms;
+                transform: translateY(calc(50vh - 43px));
+            }
+
+            .colon:after {
+                content: ':';
+            }
+
+            .num {
+                transition: opacity 500ms, text-shadow 100ms;
+                opacity: 0.025;
+            }
+
+            .num.visible {
+                opacity: 1;
+                text-shadow: 1px 1px 0px hsl(210, 50%, 40%);
+            }
+
+            .num.close {
+                opacity: 0.35;
+            }
+
+            .num.far {
+                opacity: 0.15;
+            }
+
+            .num.distant {
+                opacity: 0.1;
+            }
+
+            #dayContainer {
+                position: absolute;
+                left: 20px;
+                top: -460px;
+                overflow: visible;
+            }
+
+            .dayColumn {
+                height: fit-content;
+                display: inline-block;
+                vertical-align: top;
+                font-size: 20px;
+                line-height: 20px;
+                z-index: 20;
+                position: relative;
+                user-select: none;
+                transition: transform 1500ms;
+            }
+
+            .dayLetter {
+                transition: opacity 1500ms, text-shadow 300ms;
+                opacity: 0.025;
+            }
+
+            .dayLetter.visible {
+                opacity: 1;
+                text-shadow: 1px 1px 0px hsl(210, 50%, 40%);
+            }
+
+            .dayLetter.close {
+                opacity: 0.35;
+            }
+
+            .dayLetter.far {
+                opacity: 0.15;
+            }
+
+            .dayLetter.distant {
+                opacity: 0.1;
+            }
+        </style>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            html,
+            body {
+                padding-right: 300px;
+                height: 100%;
+                overflow: hidden;
+            }
+            img {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 100vw;
+                height: 100vh;
+                object-fit: cover;
+            }
+            #firstImage {
+                z-index: 10;
+            }
+            #secondImage {
+                z-index: 5;
+            }
+            p {
+                display: block;
+                position: absolute;
+                z-index: 15;
+            }
+            .hide {
+                opacity: 0;
+                transition: all 3s;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 style="position: absolute">Процент прохождения солнца</h1>
+        <p id="progress">Загрузка...</p>
+        <div id="container"></div>
+        <div id="dayContainer"></div>
+
+        <img src="day/0.png" id="firstImage" alt="" />
+        <img src="imgs/Unknown-1.jpeg" id="secondImage" alt="" />
+
+        <script>
+            const image = document.getElementById('firstImage');
+            const secondImage = document.getElementById('secondImage');
+
+            function newImage(src = 'imgs/Unknown-1.jpeg') {
+                secondImage.src = src;
+                setTimeout(() => {
+                    image.classList.add('hide');
+                    setTimeout(() => {
+                        image.classList.remove('hide');
+                        image.src = src;
+                    }, 3000);
+                }, 2000);
+            }
+        </script>
+
+        <script id="часики">
+            let size = 86;
+            let classList = ['visible', 'close', 'far', 'far', 'distant', 'distant'];
+            let use24HourClock = true;
+            const container = document.getElementById('container');
+
+            function createClock() {
+                for (let j = 0; j < 6; j++) {
+                    let column = document.createElement('div');
+                    column.classList.add('column');
+
+                    let limit = j === 0 ? 3 : 10 - !(j % 2) * 4;
+                    for (let i = 0; i < limit; i++) {
+                        let num = document.createElement('div');
+                        num.classList.add('num');
+                        num.textContent = i;
+                        column.appendChild(num);
+                    }
+                    container.appendChild(column);
+
+                    if (j % 2 === 1 && j < 5) {
+                        let colon = document.createElement('div');
+                        colon.classList.add('colon');
+                        container.appendChild(colon);
+                    }
+                }
+            }
+
+            function padClock(p, n) {
+                return p + ('0' + n).slice(-2);
+            }
+
+            function getClock() {
+                let d = new Date();
+                return [use24HourClock ? d.getHours() : d.getHours() % 12 || 12, d.getMinutes(), d.getSeconds()].reduce(padClock, '');
+            }
+
+            function getClass(n, i2) {
+                return classList.find((_, classIndex) => Math.abs(n - i2) === classIndex) || '';
+            }
+
+            function updateClock() {
+                let columns = Array.from(document.getElementsByClassName('column'));
+                let c = getClock();
+
+                columns.forEach((ele, i) => {
+                    let n = +c[i];
+                    let offset = -n * size;
+                    ele.style.transform = `translateY(calc(50vh + ${offset}px - ${size / 2}px))`;
+
+                    Array.from(ele.children).forEach((ele2, i2) => {
+                        ele2.className = 'num ' + getClass(n, i2);
+                    });
+                });
+            }
+
+            createClock();
+            setInterval(updateClock, 200 + Math.E * 10);
+        </script>
+
+        <script id="деньНедели">
+            let daySize = 20;
+            let dayClassList = ['visible', 'close', 'far', 'far', 'distant', 'distant'];
+            const dayContainer = document.getElementById('dayContainer');
+
+            const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
+            const maxLength = Math.max(...daysOfWeek.map((d) => d.length));
+
+            const positionMap = {};
+            for (let pos = 0; pos < maxLength; pos++) {
+                positionMap[pos] = new Set();
+                daysOfWeek.forEach((day) => {
+                    if (pos < day.length) {
+                        positionMap[pos].add(day[pos]);
+                    }
+                });
+            }
+
+            function createDayClock() {
+                for (let pos = 0; pos < maxLength; pos++) {
+                    let column = document.createElement('div');
+                    column.classList.add('dayColumn');
+                    column.dataset.position = pos;
+
+                    let letters = Array.from(positionMap[pos]).sort();
+                    letters.forEach((letter) => {
+                        let letterDiv = document.createElement('div');
+                        letterDiv.classList.add('dayLetter');
+                        letterDiv.textContent = letter;
+                        letterDiv.dataset.letter = letter;
+                        column.appendChild(letterDiv);
+                    });
+
+                    dayContainer.appendChild(column);
+                }
+            }
+
+            function getCurrentDay() {
+                let d = new Date();
+                let dayIndex = d.getDay();
+                dayIndex = dayIndex === 0 ? 6 : dayIndex - 1;
+                return daysOfWeek[dayIndex];
+            }
+
+            function getDayClass(letter, targetLetter, index, targetIndex) {
+                if (letter === targetLetter && index === targetIndex) {
+                    return dayClassList[0];
+                }
+                let distance = Math.abs(index - targetIndex);
+                return dayClassList[distance] || '';
+            }
+
+            function updateDayClock() {
+                let columns = Array.from(document.getElementsByClassName('dayColumn'));
+                let currentDay = getCurrentDay();
+
+                columns.forEach((column, pos) => {
+                    if (pos >= currentDay.length) {
+                        column.style.transform = `translateY(calc(50vh - ${daySize / 2}px))`;
+                        Array.from(column.children).forEach((letterDiv) => {
+                            letterDiv.className = 'dayLetter';
+                        });
+                        return;
+                    }
+
+                    let targetLetter = currentDay[pos];
+                    let letters = Array.from(column.children);
+                    let targetIndex = letters.findIndex((l) => l.dataset.letter === targetLetter);
+
+                    if (targetIndex === -1) return;
+
+                    let offset = -targetIndex * daySize;
+                    column.style.transform = `translateY(calc(50vh + ${offset}px - ${daySize / 2}px))`;
+
+                    letters.forEach((letterDiv, index) => {
+                        letterDiv.className = 'dayLetter ' + getDayClass(letterDiv.dataset.letter, targetLetter, index, targetIndex);
+                    });
+                });
+            }
+
+            let lastDay = null;
+
+            function checkAndUpdateDay() {
+                let currentDay = getCurrentDay();
+                if (currentDay !== lastDay) {
+                    lastDay = currentDay;
+                    updateDayClock();
+                }
+            }
+
+            createDayClock();
+            updateDayClock();
+            lastDay = getCurrentDay();
+            setInterval(checkAndUpdateDay, 1000);
+        </script>
+
+        <script>
+            async function sunProgress() {
+                const latitude = 55.7558,
+                    longitude = 37.6173;
+
+                const now = new Date();
+                const times = SunCalc.getTimes(now, latitude, longitude);
+
+                console.log(times);
+
+                let start, end, time;
+
+                if (now > times.sunrise && now < times.sunset) {
+                    // Время после восхода и до заката: берём восход и закат текущего дня
+                    start = times.sunrise;
+                    end = times.sunset;
+                    console.log('Время после восхода и до заката');
+                    time = true;
+                } else if (now > times.sunset) {
+                    // Время после заката: берём закат и завтрашний рассвет
+                    const nextDay = new Date(now);
+                    nextDay.setDate(now.getDate() + 1); // Устанавливаем на следующий день
+                    const nextSunrise = SunCalc.getTimes(nextDay, latitude, longitude).sunrise;
+                    start = times.sunset;
+                    end = nextSunrise;
+                    console.log('Время после заката');
+                    time = false;
+                } else if (now < times.sunrise) {
+                    // Время до восхода: берём вчерашний закат и сегодняшний восход
+                    const previousDay = new Date(now);
+                    previousDay.setDate(now.getDate() - 1); // Устанавливаем на предыдущий день
+                    const previousSunset = SunCalc.getTimes(previousDay, latitude, longitude).sunset;
+                    start = previousSunset;
+                    end = times.sunrise;
+                    console.log('Время до восхода');
+                    time = false;
+                }
+
+                return [Math.min(100, Math.max(0, ((now - start) / (end - start)) * 100)), time];
+            }
+
+            var images = {
+                night: new Array(38).fill(undefined).map((_, i, array) => ({
+                    src: `night/${i}.png`,
+                    index: i,
+                    percentage: ((i + 1) / array.length) * 100,
+                })),
+                day: new Array(56).fill(undefined).map((_, i, array) => ({
+                    src: `day/${i}.png`,
+                    index: i,
+                    percentage: ((i + 1) / array.length) * 100,
+                })),
+                current: null,
+                currentIsDay: null,
+            };
+
+            function getNewLast(isDay, percent) {
+                let i = 0;
+
+                while (images[isDay ? 'day' : 'night'][i].percentage < percent) i++;
+
+                return images[isDay ? 'day' : 'night'][i];
+            }
+
+            console.log(images);
+
+            async function updateProgress() {
+                try {
+                    const [percent, isDay] = await sunProgress();
+                    progress.innerText = percent;
+                    if (percent > images.current?.percentage || images.currentIsDay !== isDay) {
+                        if (images.currentIsDay !== isDay) {
+                            images.currentIsDay = isDay;
+                            const last = getNewLast(isDay, percent);
+                            newImage(last.src);
+                            images.current = last;
+                            return;
+                        } else {
+                            const last = images[isDay ? 'day' : 'night'][images.current.index + 1];
+                            newImage(last.src);
+                            images.current = last;
+                        }
+                    }
+                } catch (error) {
+                    alert(error.stack);
+                    document.getElementById('progress').innerText = 'Не удалось получить данные о местоположении.';
+                }
+            }
+            updateProgress();
+            setInterval(() => {
+                updateProgress();
+            }, 4000);
+        </script>
+    </body>
+</html>
