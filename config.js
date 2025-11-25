@@ -1,6 +1,14 @@
 const 
-    latitude = 1,
+    latitude = 1, 
     longitude = 1,
-    imgType = "png",
-    res = "4k"
-    scope = 5;
+
+    scopeClock = 5,
+    scopeLetters = 5,
+
+    use24HourClock = true,
+    
+    clockRight = 0,
+    clockTop = 0,
+    
+    weekLeft = 0,
+    weekTop = 0;
