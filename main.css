@@ -1,0 +1,147 @@
+@font-face {
+    font-family: 'minecraft';
+    src: url('./minecraft.ttf');
+}
+
+body {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+    background-color: hsl(210, 30%, 8%);
+    color: hsla(210, 20%, 90%, 0.89);
+    font-family: 'minecraft', sans-serif;
+    font-weight: 100;
+}
+
+#clockContainer {
+    position: absolute;
+    overflow: visible;
+}
+
+.column,
+.colon {
+    height: fit-content;
+    display: inline-block;
+    vertical-align: top;
+    z-index: 20;
+    position: relative;
+}
+
+.column {
+    user-select: none;
+    transition: transform 300ms;
+}
+
+.colon {
+    transition: transform 300ms;
+    transform: translateY(calc(50vh - 43px));
+}
+
+.colon:after {
+    content: ':';
+}
+
+.num {
+    transition: opacity 500ms, text-shadow 100ms;
+    opacity: 0.025;
+}
+
+.num.visible {
+    opacity: 1;
+    text-shadow: 1px 1px 0px hsl(210, 50%, 40%);
+}
+
+.num.close {
+    opacity: 0.35;
+}
+
+.num.far {
+    opacity: 0.15;
+}
+
+.num.distant {
+    opacity: 0.1;
+}
+
+#dayContainer {
+    position: absolute;
+    overflow: visible;
+}
+
+.dayColumn {
+    height: fit-content;
+    display: inline-block;
+    vertical-align: top;
+    z-index: 20;
+    position: relative;
+    user-select: none;
+    transition: transform 1500ms;
+}
+
+.dayLetter {
+    transition: opacity 1500ms, text-shadow 300ms;
+    opacity: 0.025;
+}
+
+.dayLetter.visible {
+    opacity: 1;
+    text-shadow: 1px 1px 0px hsl(210, 50%, 40%);
+}
+
+.dayLetter.close {
+    opacity: 0.35;
+}
+
+.dayLetter.far {
+    opacity: 0.15;
+}
+
+.dayLetter.distant {
+    opacity: 0.1;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#progress {
+    font-size: 16px;
+}
+
+html,
+body {
+    padding-right: 300px;
+    height: 100%;
+    overflow: hidden;
+}
+
+img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+}
+
+#firstImage {
+    z-index: 10;
+}
+
+#secondImage {
+    z-index: 5;
+}
+
+p {
+    display: block;
+    position: absolute;
+    z-index: 15;
+}
+
+.hide {
+    opacity: 0;
+    transition: all 3s;
+}
