@@ -66,5 +66,3 @@ Works in modern web browsers that support:
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 The MIT License allows you to freely use, modify, and distribute the code, as long as you include the original copyright notice and license text.
-
-**⚠️ Important License Information**: Please read [LICENSE_NOTICE.md](LICENSE_NOTICE.md) for important information about third-party assets (images, fonts) and their licensing restrictions.
