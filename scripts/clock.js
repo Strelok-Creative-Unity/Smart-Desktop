@@ -8,6 +8,7 @@ function vh(percent) {
 }
 
 function createClock() {
+    container.innerHTML = "";
     for (let j = 0; j < 6; j++) {
         let column = document.createElement('div');
         column.classList.add('column');
@@ -57,6 +58,3 @@ function updateClock() {
     });
 }
 
-createClock();
-updateClock()
-setInterval(updateClock, 200 + Math.E * 10);

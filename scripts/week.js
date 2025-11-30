@@ -16,6 +16,7 @@ for (let pos = 0; pos < maxLength; pos++) {
 }
 
 function createDayClock() {
+    dayContainer.innerHTML = "";
     for (let pos = 0; pos < maxLength; pos++) {
         let column = document.createElement('div');
         column.classList.add('dayColumn');

@@ -1,8 +1,8 @@
-const 
+var 
     latitude = 1, 
     longitude = 1,
 
-    scopeClock = 5,
+    scopeClock = 10,
     scopeLetters = 5,
 
     use24HourClock = true,
