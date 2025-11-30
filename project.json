@@ -1,0 +1,130 @@
+{
+	"contentrating" : "Everyone",
+	"description" : "Interactive Minecraft-style wallpapers that follow the sun in real time, featuring 54 switchable phases. Display time, weekday, date, and other information directly on your desktop. All elements are fully customizable: adjust coordinates, enable/disable 24-hour clock, tweak visual “scope,” and reposition items.\n\nPerfect for daily use as a stylish and functional HUD.\n\nFeatures:\n• Time and date in Minecraft style\n• 54 switchable phases\n• Customizable interface\n• Smooth animations\n• Real-time sun-following elements\n• High compatibility\n\nProject source:\nGitHub: https://github.com/Strelok-Creative-Unity/Smart-Desktop/tree/master",
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"clockRight" : 
+			{
+				"index" : 0,
+				"max" : 2000,
+				"min" : -2000,
+				"order" : 100,
+				"step" : 0.2,
+				"text" : "Clock Right",
+				"type" : "slider",
+				"value" : 0
+			},
+			"clockTop" : 
+			{
+				"index" : 1,
+				"max" : 2000,
+				"min" : -2000,
+				"order" : 101,
+				"step" : 0.2,
+				"text" : "Clock Top",
+				"type" : "slider",
+				"value" : 0
+			},
+			"latitude" : 
+			{
+				"index" : 2,
+				"max" : 90,
+				"min" : -90,
+				"order" : 102,
+				"step" : 0.1,
+				"text" : "Latitude",
+				"type" : "slider",
+				"value" : 40
+			},
+			"longitude" : 
+			{
+				"index" : 3,
+				"max" : 180,
+				"min" : -180,
+				"order" : 103,
+				"step" : 0.1,
+				"text" : "Longitude",
+				"type" : "slider",
+				"value" : 30
+			},
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0.1450980392156863 0.07058823529411765 0.047058823529411764"
+			},
+			"scopeClock" : 
+			{
+				"index" : 4,
+				"max" : 20,
+				"min" : 0,
+				"order" : 104,
+				"step" : 0.2,
+				"text" : "Clock Scope",
+				"type" : "slider",
+				"value" : 5
+			},
+			"scopeLetters" : 
+			{
+				"index" : 5,
+				"max" : 20,
+				"min" : 0,
+				"order" : 105,
+				"step" : 0.2,
+				"text" : "Letters Scope",
+				"type" : "slider",
+				"value" : 5
+			},
+			"use24HourClock" : 
+			{
+				"index" : 6,
+				"order" : 106,
+				"text" : "Use 24h Clock",
+				"type" : "bool",
+				"value" : true
+			},
+			"useEnglishVersion" : 
+			{
+				"index" : 7,
+				"order" : 107,
+				"text" : "Use 24h Clock",
+				"type" : "bool",
+				"value" : false
+			},
+			"weekLeft" : 
+			{
+				"index" : 8,
+				"max" : 2000,
+				"min" : -2000,
+				"order" : 108,
+				"step" : 0.2,
+				"text" : "Week Left",
+				"type" : "slider",
+				"value" : 0
+			},
+			"weekTop" : 
+			{
+				"index" : 9,
+				"max" : 2000,
+				"min" : -2000,
+				"order" : 109,
+				"step" : 0.2,
+				"text" : "Week Top",
+				"type" : "slider",
+				"value" : 0
+			}
+		}
+	},
+	"preview" : "preview.jpg",
+	"ratingsex" : "none",
+	"ratingviolence" : "none",
+	"tags" : [ "Game" ],
+	"title" : "SCU/Minecraft-Smart-Desktop",
+	"type" : "web",
+	"version" : 0,
+	"visibility" : "private"
+}

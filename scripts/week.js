@@ -2,20 +2,25 @@ let daySize = vh(scopeLetters);
 let dayClassList = ['visible', 'close', 'far', 'far', 'distant', 'distant'];
 const dayContainer = document.getElementById('dayContainer');
 
-const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
-const maxLength = Math.max(...daysOfWeek.map((d) => d.length));
+const daysOfWeek = {
+    ru: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'],
+    eng: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+};
+const lang = () => useEnglishVersion ? "eng" : "ru";
+
 
 const positionMap = {};
-for (let pos = 0; pos < maxLength; pos++) {
-    positionMap[pos] = new Set();
-    daysOfWeek.forEach((day) => {
-        if (pos < day.length) {
-            positionMap[pos].add(day[pos]);
-        }
-    });
-}
 
 function createDayClock() {
+    const maxLength = Math.max(...daysOfWeek[lang()].map((d) => d.length));
+    for (let pos = 0; pos < maxLength; pos++) {
+        positionMap[pos] = new Set();
+        daysOfWeek[lang()].forEach((day) => {
+            if (pos < day.length) {
+                positionMap[pos].add(day[pos]);
+            }
+        });
+    }
     dayContainer.innerHTML = "";
     for (let pos = 0; pos < maxLength; pos++) {
         let column = document.createElement('div');
@@ -39,7 +44,7 @@ function getCurrentDay() {
     let d = new Date();
     let dayIndex = d.getDay();
     dayIndex = dayIndex === 0 ? 6 : dayIndex - 1;
-    return daysOfWeek[dayIndex];
+    return daysOfWeek[lang()][dayIndex];
 }
 
 function getDayClass(letter, targetLetter, index, targetIndex) {
