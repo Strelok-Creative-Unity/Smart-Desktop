@@ -16,6 +16,7 @@ window.wallpaperPropertyListener = {
     if (props.clockTop) clockTop = props.clockTop.value;
     if (props.weekLeft) weekLeft = props.weekLeft.value;
     if (props.weekTop) weekTop = props.weekTop.value;
+    if (props.useEnglishVersion) useEnglishVersion = props.useEnglishVersion.value;
     update();
   }
 };

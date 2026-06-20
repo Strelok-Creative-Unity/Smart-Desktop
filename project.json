@@ -91,9 +91,9 @@
 			{
 				"index" : 7,
 				"order" : 107,
-				"text" : "Use 24h Clock",
+				"text" : "Use English",
 				"type" : "bool",
-				"value" : false
+				"value" : true
 			},
 			"weekLeft" : 
 			{

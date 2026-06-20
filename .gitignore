@@ -1,5 +1,3 @@
 night/
 day/
 .DS_Store
-test/output/
-test/.venv/
