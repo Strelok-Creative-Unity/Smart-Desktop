@@ -57,7 +57,7 @@ async function initializeImage() {
         images.current = initImage;
         images.currentIsDay = isDay;
 
-        image.src = initImage.src;
+        setImage(initImage.src);
 
     } catch (error) {
         console.error("Ошибка при инициализации изображения:", error);
@@ -75,7 +75,11 @@ async function updateProgress() {
                 images.current = last;
                 return;
             } else {
-                const last = images[isDay ? 'day' : 'night'][images.current.index + 1];
+                const list = images[isDay ? 'day' : 'night'];
+                const nextIndex = images.current.index + 1;
+                if (nextIndex >= list.length) return;
+
+                const last = list[nextIndex];
                 newImage(last.src);
                 images.current = last;
             }
